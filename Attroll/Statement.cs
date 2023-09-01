@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Attroll
+namespace Atroll
 {
     internal readonly struct Statement : IReadOnlyList<IToken>
     {
@@ -66,7 +66,7 @@ namespace Attroll
                         if ( verb.Type is VerbType.Reroll )
                         {
                             expected = 3;
-                            if ( m_Tokens [ 2 ] is not IntegerLiteralToken reroll || reroll.Amount is not ( 4 or 6 or 8 or 10 or 12 or 20 or 100 ) )
+                            if ( m_Tokens [ 2 ] is not IntegerLiteralToken reroll || reroll.Amount < 0 )
                             {
                                 throw new InvalidProgramException ( $"{verb.Type} calls contain an Integer declaration followed by a valid Die sides declaration on line {verb.Line} at column {m_Tokens [ 2 ].Column}" );
                             }

@@ -1,4 +1,4 @@
-﻿namespace Attroll
+﻿namespace Atroll
 {
     internal enum VerbType
     {

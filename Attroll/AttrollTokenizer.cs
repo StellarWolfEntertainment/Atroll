@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Attroll
+namespace Atroll
 {
     internal partial class AtrollTokenizer : IReadOnlyList<IToken>
     {

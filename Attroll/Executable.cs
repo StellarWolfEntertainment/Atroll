@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Attroll
+namespace Atroll
 {
     public sealed class Executable
     {

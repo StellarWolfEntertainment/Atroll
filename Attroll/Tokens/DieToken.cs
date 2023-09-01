@@ -1,4 +1,4 @@
-﻿namespace Attroll
+﻿namespace Atroll
 {
     internal readonly struct DieToken : IToken
     {
@@ -52,7 +52,7 @@
                 throw new InvalidProgramException ( $"Invalid die count '{m_Count}' on line {m_Line} at column {m_Column}" );
             }
 
-            if ( m_Sides is not ( 4 or 6 or 8 or 10 or 12 or 20 or 100 ) )
+            if ( m_Sides < 0 )
             {
                 int col = m_Column + m_Count.ToString ().Length + 1;
                 throw new InvalidProgramException ( $"Invalid die sides '{m_Sides}' on line {m_Line} at column {col}" );
