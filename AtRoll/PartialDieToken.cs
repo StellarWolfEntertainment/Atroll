@@ -16,6 +16,9 @@
 
         #region Properties
 
+        /// <summary>
+        /// Does the Die set produce negative values.
+        /// </summary>
         public bool Negative => m_Negative;
 
         /// <summary>

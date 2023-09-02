@@ -1,29 +1,43 @@
 ﻿namespace AtRoll
 {
+    /// <summary>
+    /// Represents a nestable statement in the 'The New World' game.
+    /// </summary>
     internal sealed class NestableStatement
     {
         #region Fields
 
         private static readonly Random s_Random = new ();
 
-        private readonly Statement m_Statment;
+        private readonly Statement m_Statement;
         private readonly NestableStatement m_Child;
 
         #endregion
 
         #region Properties
 
-        public Statement Statment => m_Statment;
+        /// <summary>
+        /// Gets the statement associated with this nestable statement.
+        /// </summary>
+        public Statement Statement => m_Statement;
 
+        /// <summary>
+        /// Gets the child nestable statement if one exists, otherwise null.
+        /// </summary>
         public NestableStatement Child => m_Child;
 
         #endregion
 
         #region Constructors
 
-        public NestableStatement ( Statement statment, NestableStatement child = null )
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NestableStatement"/> class.
+        /// </summary>
+        /// <param name="statement">The main statement of this nestable statement.</param>
+        /// <param name="child">The child nestable statement if one exists.</param>
+        public NestableStatement ( Statement statement, NestableStatement child = null )
         {
-            m_Statment = statment;
+            m_Statement = statement;
             m_Child = child;
         }
 
@@ -31,10 +45,26 @@
 
         #region Methods
 
+        private static IEnumerable<int> Generate ( int count, int sides, bool negative )
+        {
+            return Enumerable.Range ( 0, count ).Select ( _ =>
+            {
+                int result = s_Random.Next ( sides ) + 1;
+                if ( negative )
+                    result = -result;
+                return result;
+            } );
+        }
+
+        /// <summary>
+        /// Evaluates the nestable statement and returns a sequence of integers based on the specified rules.
+        /// </summary>
+        /// <param name="previous">The previous sequence of integers (optional).</param>
+        /// <returns>A sequence of integers resulting from the evaluation of the nestable statement.</returns>
         public IEnumerable<int> Evaluate ( IEnumerable<int> previous = null )
         {
-            VerbToken action = m_Statment.Verb;
-            IToken rule = m_Statment [ 1 ];
+            VerbToken action = m_Statement.Verb;
+            IToken rule = m_Statement [ 1 ];
 
             switch ( action.Type )
             {
@@ -58,23 +88,11 @@
 
                     if ( previous == null )
                     {
-                        previous = Enumerable.Range ( 0, count ).Select ( _ =>
-                        {
-                            int result = s_Random.Next ( sides + 1 );
-                            if ( rollNegative )
-                                result = -result;
-                            return result;
-                        } );
+                        previous = Generate ( count, sides, rollNegative );
                     }
                     else
                     {
-                        IEnumerable<int> next = Enumerable.Range ( 0, count ).Select ( _ =>
-                        {
-                            int result = s_Random.Next ( sides + 1 );
-                            if ( rollNegative )
-                                result = -result;
-                            return result;
-                        } );
+                        IEnumerable<int> next = Generate ( count, sides, rollNegative );
                         previous = Enumerable.Concat ( previous, next );
                     }
 
@@ -100,7 +118,7 @@
                         rerollCond = new EqualityIntegerToken ( iltIf.Value.ToString (), 0, 0 ); // since this is only temporary theres no reason to give positional data
                     }
 
-                    PartialDieToken rerollSides = (PartialDieToken) m_Statment [ 2 ];
+                    PartialDieToken rerollSides = (PartialDieToken) m_Statement [ 2 ];
 
                     List<int> values = previous.ToList ();
 

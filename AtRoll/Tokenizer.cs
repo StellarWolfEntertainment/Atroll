@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace AtRoll
 {
+    /// <summary>
+    /// Represents a tokenizer for processing program code in the 'The New World' game.
+    /// </summary>
     internal partial class Tokenizer : IEnumerable<IToken>
     {
         #region Fields
@@ -13,6 +16,10 @@ namespace AtRoll
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Tokenizer"/> class with the program code.
+        /// </summary>
+        /// <param name="program">The program code to tokenize.</param>
         public Tokenizer ( string program )
         {
             m_Tokens = new List<IToken> ();
@@ -97,8 +104,16 @@ namespace AtRoll
             }
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the tokens produced by the tokenizer.
+        /// </summary>
+        /// <returns>An enumerator that can be used to iterate through the tokens.</returns>
         public IEnumerator<IToken> GetEnumerator () => m_Tokens.GetEnumerator ();
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the tokens produced by the tokenizer.
+        /// </summary>
+        /// <returns>An enumerator that can be used to iterate through the tokens.</returns>
         IEnumerator IEnumerable.GetEnumerator () => GetEnumerator ();
 
         [GeneratedRegex ( "^((?:[-0-9]+)|(?:(?:!|<=|>=|<|>)[-0-9]+))$" )]

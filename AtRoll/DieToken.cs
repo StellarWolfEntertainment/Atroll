@@ -26,6 +26,9 @@
         /// </summary>
         public int Sides => m_Sides;
 
+        /// <summary>
+        /// Does the Die set produce negative values.
+        /// </summary>
         public bool Negative => m_Count < 0;
 
         /// <summary>

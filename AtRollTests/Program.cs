@@ -2,7 +2,7 @@
 {
     internal class Program
     {
-        static void Main ( )
+        private static void Main ()
         {
             string program =
 @"Roll 4d6

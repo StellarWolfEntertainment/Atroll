@@ -1,5 +1,8 @@
 ﻿namespace AtRoll
 {
+    /// <summary>
+    /// Represents the main program for processing statements in the 'The New World' game.
+    /// </summary>
     public sealed class Program
     {
         #region Fields
@@ -10,9 +13,12 @@
 
         #region Constructors
 
+        /// <summary>
+        /// Private constructor for creating a Program instance from a collection of statements.
+        /// </summary>
+        /// <param name="statements">The collection of statements to process.</param>
         private Program ( IEnumerable<Statement> statements )
         {
-
             m_Statements = new List<NestableStatement> ();
             Queue<Statement> statementsL = new ( statements.Reverse () );
 
@@ -38,6 +44,11 @@
             m_Statements.Reverse ();
         }
 
+        /// <summary>
+        /// Creates a Program instance from a stream containing program statements.
+        /// </summary>
+        /// <param name="stream">The input stream containing program statements.</param>
+        /// <returns>A Program instance representing the parsed program.</returns>
         public static Program Create ( Stream stream )
         {
             using ( StreamReader reader = new ( stream ) )
@@ -47,18 +58,27 @@
             }
         }
 
+        /// <summary>
+        /// Creates a Program instance from a string containing program statements.
+        /// </summary>
+        /// <param name="program">The input string containing program statements.</param>
+        /// <returns>A Program instance representing the parsed program.</returns>
         public static Program Create ( string program )
         {
             Tokenizer tokens = new ( program );
             StatementList statements = new ( tokens );
-            return new ( statements );
+            return new Program ( statements );
         }
 
         #endregion
 
         #region Methods
 
-        public int Evaluate ()
+        /// <summary>
+        /// Gets the evaluation chain of statements and returns the results.
+        /// </summary>
+        /// <returns>An IEnumerable of integers representing the results of evaluating the statements.</returns>
+        public IEnumerable<int> GetEvaluationChain ()
         {
             IEnumerable<int> results = null;
 
@@ -69,8 +89,14 @@
                 results = statement.Evaluate ( results );
             }
 
-            return results.Sum ();
+            return results;
         }
+
+        /// <summary>
+        /// Evaluates the program and returns the sum of the results.
+        /// </summary>
+        /// <returns>The sum of the results of evaluating the program's statements.</returns>
+        public int Evaluate () => GetEvaluationChain ().Sum ();
 
         #endregion
     }
