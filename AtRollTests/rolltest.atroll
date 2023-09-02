@@ -1,0 +1,4 @@
+﻿Roll 4d6
+While <=2
+ Reroll <=2 d6
+Drop Lowest

@@ -11,4 +11,10 @@
     <ProjectReference Include="..\AtRoll\AtRoll.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="rolltest.atroll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

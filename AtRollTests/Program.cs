@@ -4,13 +4,12 @@
     {
         private static void Main ()
         {
-            string program =
-@"Roll 4d6
-While <=2
- Reroll <=2 d6
-Drop Lowest";
+            AtRoll.Program prog;
 
-            AtRoll.Program prog = AtRoll.Program.Create ( program );
+            using ( FileStream fs = new ( "rolltest.atroll", FileMode.Open, FileAccess.Read ) )
+            {
+                prog = AtRoll.Program.Create ( fs );
+            }
 
             for ( int i = 0; i < 10000; i++ )
             {
