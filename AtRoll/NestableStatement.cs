@@ -1,6 +1,6 @@
 ﻿namespace AtRoll
 {
-    internal class NestableStatement
+    internal sealed class NestableStatement
     {
         #region Fields
 
@@ -15,7 +15,7 @@
 
         public Statement Statment => m_Statment;
 
-        public NestableStatement? Child => m_Child;
+        public NestableStatement Child => m_Child;
 
         #endregion
 
@@ -90,14 +90,23 @@
                     previous = previous.Take ( length );
                     break;
                 case VerbType.Reroll:
-                    IntegerLiteralToken rerollCond = (IntegerLiteralToken) rule;
+                    if ( rule is EqualityIntegerToken rerollCond )
+                    {
+
+                    }
+                    else
+                    {
+                        IntegerLiteralToken iltIf = (IntegerLiteralToken) rule;
+                        rerollCond = new EqualityIntegerToken ( iltIf.Value.ToString (), 0, 0 ); // since this is only temporary theres no reason to give positional data
+                    }
+
                     PartialDieToken rerollSides = (PartialDieToken) m_Statment [ 2 ];
 
                     List<int> values = previous.ToList ();
 
                     for ( int i = 0; i < values.Count; i++ )
                     {
-                        if ( values [ i ] == rerollCond.Value )
+                        if ( rerollCond.IsInRange ( values [ i ] ) )
                         {
                             int result = s_Random.Next ( rerollSides.Sides + 1 );
 
@@ -125,6 +134,7 @@
                     {
                         previous = m_Child?.Evaluate ( previous ) ?? throw new InvalidOperationException ( $"There is no action performed in this {action.Type} call on line {action.Line}" );
                     }
+
                     break;
                 case VerbType.While:
                     if ( rule is EqualityIntegerToken eitWhile )
@@ -141,6 +151,7 @@
                     {
                         previous = m_Child?.Evaluate ( previous ) ?? throw new InvalidOperationException ( $"There is no action performed in this {action.Type} call on line {action.Line}" );
                     }
+
                     break;
                 case VerbType.For:
                     IntegerLiteralToken iltFor = (IntegerLiteralToken) rule;
@@ -149,6 +160,7 @@
                     {
                         previous = m_Child?.Evaluate ( previous ) ?? throw new InvalidOperationException ( $"There is no action performed in this {action.Type} call on line {action.Line}" );
                     }
+
                     break;
                 case VerbType.Add or VerbType.Sub or VerbType.Mul or VerbType.Div:
                     IntegerLiteralToken iltMath = (IntegerLiteralToken) rule;

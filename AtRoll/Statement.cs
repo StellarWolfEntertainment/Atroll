@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -64,7 +65,7 @@ namespace AtRoll
                     {
                         expected = 3;
 
-                        if ( rule is not EqualityIntegerToken )
+                        if ( rule is not ( EqualityIntegerToken or IntegerLiteralToken ) )
                         {
                             throw new InvalidProgramException ( $"{verb.Type} calls must be followed by an Integer declaration on line {verb.Line} at column {rule.Column}" );
                         }
@@ -108,6 +109,10 @@ namespace AtRoll
                 throw new InvalidProgramException ( $"{expected} tokens expected, {m_Tokens.Count} found on line {m_Tokens [ 0 ].Line}" );
             }
         }
+
+        public IEnumerator<IToken> GetEnumerator () => m_Tokens.GetEnumerator ();
+
+        IEnumerator IEnumerable.GetEnumerator () => GetEnumerator ();
 
         #endregion
     }
