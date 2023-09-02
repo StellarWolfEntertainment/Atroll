@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace Atroll
+namespace AtRoll
 {
-    internal partial class AtrollTokenizer : IReadOnlyList<IToken>
+    internal partial class Tokenizer : IEnumerable<IToken>
     {
         #region Fields
 
@@ -16,21 +11,13 @@ namespace Atroll
 
         #endregion
 
-        #region Properties
-
-        public IToken this [ int index ] => throw new NotImplementedException ();
-
-        public int Count => throw new NotImplementedException ();
-
-        #endregion
-
         #region Constructors
 
-        public AtrollTokenizer ( string program )
+        public Tokenizer ( string program )
         {
             m_Tokens = new List<IToken> ();
 
-            string [] lines = program.Split ( "\n", StringSplitOptions.RemoveEmptyEntries );
+            string [] lines = program.Split ( '\n', StringSplitOptions.RemoveEmptyEntries );
 
             int lineNumber = 1;
 
@@ -61,30 +48,32 @@ namespace Atroll
 
                 if ( !string.IsNullOrEmpty ( currentWord ) )
                 {
-                    m_Tokens.Add ( ParseToken ( currentWord, lineNumber, columnNumber ) );
+                    IToken token = ParseToken ( currentWord, lineNumber, columnNumber - currentWord.Length );
+                    token.Validate ();
+                    m_Tokens.Add ( token );
                 }
 
-                m_Tokens.Add ( new EndStatementToken () );
+                m_Tokens.Add ( new EndStatementToken ( lineNumber, columnNumber ) );
                 lineNumber++;
-                columnNumber = 1;
             }
 
             if ( m_Tokens [ 0 ] is not VerbToken verbToken || verbToken.Type != VerbType.Roll )
-            {
-                throw new InvalidProgramException ( "@roll programs must start with a Roll call" );
-            }
-
-            if ( m_Tokens.Count ( token => token is VerbToken verb && verb.Type == VerbType.Roll ) > 1 )
-            {
-                throw new InvalidProgramException ( "@roll programs can only call Roll once at the start of the program, did you mean to 'Add'?" );
-            }
+                throw new InvalidProgramException ( "@Roll programs must start with a Roll call" );
         }
+
+        #endregion
+
+        #region Methods
 
         private IToken ParseToken ( string currentWord, int lineNumber, int columnNumber )
         {
             if ( int.TryParse ( currentWord, out int @int ) )
             {
                 return new IntegerLiteralToken ( @int, lineNumber, columnNumber );
+            }
+            else if ( IntegerLiteralRegex ().IsMatch ( currentWord ) )
+            {
+                return new EqualityIntegerToken ( currentWord, lineNumber, columnNumber );
             }
             else if ( Enum.TryParse ( currentWord, true, out ExtremeType extreme ) )
             {
@@ -93,6 +82,10 @@ namespace Atroll
             else if ( Enum.TryParse ( currentWord, true, out VerbType verb ) )
             {
                 return new VerbToken ( verb, lineNumber, columnNumber );
+            }
+            else if ( PartialDieRegex ().IsMatch ( currentWord ) )
+            {
+                return new PartialDieToken ( currentWord, lineNumber, columnNumber );
             }
             else if ( DieRegex ().IsMatch ( currentWord ) )
             {
@@ -104,16 +97,18 @@ namespace Atroll
             }
         }
 
-        #endregion
-
-        #region Methods
-
         public IEnumerator<IToken> GetEnumerator () => m_Tokens.GetEnumerator ();
 
         IEnumerator IEnumerable.GetEnumerator () => GetEnumerator ();
 
-        [GeneratedRegex ( "^[0-9]+d[0-9]+" )]
+        [GeneratedRegex ( "^((?:[-0-9]+)|(?:(?:!|<=|>=|<|>)[-0-9]+))$" )]
+        private static partial Regex IntegerLiteralRegex ();
+
+        [GeneratedRegex ( "^[-]{0,1}[0-9]+d[0-9]+$" )]
         private static partial Regex DieRegex ();
+
+        [GeneratedRegex ( "^[-]{0,1}d[0-9]+$" )]
+        private static partial Regex PartialDieRegex ();
 
         #endregion
     }

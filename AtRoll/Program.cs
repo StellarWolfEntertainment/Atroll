@@ -1,8 +1,6 @@
-﻿using System.Collections;
-
-namespace Atroll
+﻿namespace AtRoll
 {
-    public sealed class Executable
+    public sealed class Program
     {
         #region Fields
 
@@ -12,8 +10,9 @@ namespace Atroll
 
         #region Constructors
 
-        private Executable ( IEnumerable<Statement> statements )
+        private Program ( IEnumerable<Statement> statements )
         {
+
             m_Statements = new List<NestableStatement> ();
             Queue<Statement> statementsL = new ( statements.Reverse () );
 
@@ -23,7 +22,7 @@ namespace Atroll
             {
                 Statement statement = statementsL.Dequeue ();
 
-                if ( statement.Verb.Type is VerbType.If or VerbType.While )
+                if ( statement.Verb.Type is VerbType.If or VerbType.While or VerbType.For )
                 {
                     nextStatement = new NestableStatement ( statement, nextStatement );
                 }
@@ -39,7 +38,7 @@ namespace Atroll
             m_Statements.Reverse ();
         }
 
-        public static Executable Create ( Stream stream )
+        public static Program Create ( Stream stream )
         {
             using ( StreamReader reader = new ( stream ) )
             {
@@ -48,9 +47,9 @@ namespace Atroll
             }
         }
 
-        public   static Executable Create ( string program )
+        public static Program Create ( string program )
         {
-            AtrollTokenizer tokens = new ( program );
+            Tokenizer tokens = new ( program );
             StatementList statements = new ( tokens );
             return new ( statements );
         }
@@ -61,7 +60,7 @@ namespace Atroll
 
         public int Evaluate ()
         {
-            IEnumerable<int> results = new List<int> ();
+            IEnumerable<int> results = null;
 
             foreach ( NestableStatement statement in m_Statements )
             {
@@ -72,8 +71,6 @@ namespace Atroll
 
             return results.Sum ();
         }
-
-        internal IEnumerator<NestableStatement> GetEnumerator () => m_Statements.GetEnumerator ();
 
         #endregion
     }

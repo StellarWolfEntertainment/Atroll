@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 
-namespace Atroll
+namespace AtRoll
 {
     internal class StatementList : IReadOnlyList<Statement>
     {
@@ -28,7 +23,7 @@ namespace Atroll
         public StatementList ( IEnumerable<IToken> tokens )
         {
             m_Statements = new List<Statement> ();
-            List<IToken> statementTokens = new();
+            List<IToken> statementTokens = new ();
 
             foreach ( IToken token in tokens )
             {
