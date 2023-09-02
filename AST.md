@@ -6,7 +6,7 @@
 Each statement follows one of two formats:
 - Verb Modifier
 - Verb Modifier1 Modifier2
-- 
+
 Verbs and Modifiers:
 
 The choice of verb determines the allowed modifiers for a statement.
