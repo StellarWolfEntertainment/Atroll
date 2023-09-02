@@ -30,7 +30,6 @@ namespace AtRoll
                 if ( token is EndStatementToken )
                 {
                     Statement statement = new ( statementTokens );
-                    statement.Validate ();
                     m_Statements.Add ( statement );
                     statementTokens.Clear ();
                 }
