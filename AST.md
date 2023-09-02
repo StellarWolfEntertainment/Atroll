@@ -6,7 +6,7 @@
 Each statement follows one of two formats:
 - Verb Modifier
 - Verb Modifier1 Modifier2
-- 
+
 Verbs and Modifiers:
 
 The choice of verb determines the allowed modifiers for a statement.
@@ -25,7 +25,7 @@ Verbs and their corresponding modifiers:
 1. Roll Die
 2. Drop Highest
 3. Reroll 3 d6
-4. While 5 > 0
+4. While <5
 5. If 10 Equals
 6. For 3
 7. Add 5
