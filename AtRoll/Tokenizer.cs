@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace AtRoll
 {
     /// <summary>
-    /// Represents a tokenizer for processing program code in the 'The New World' game.
+    /// Represents a tokenizer for processing program code in the @Roll Language.
     /// </summary>
     internal partial class Tokenizer : IEnumerable<IToken>
     {
@@ -78,7 +78,7 @@ namespace AtRoll
             {
                 return new IntegerLiteralToken ( @int, lineNumber, columnNumber );
             }
-            else if ( IntegerLiteralRegex ().IsMatch ( currentWord ) )
+            else if ( Regex.IsMatch ( currentWord, "^((?:[-0-9]+)|(?:(?:!|<=|>=|<|>)[-0-9]+))$" ) )
             {
                 return new EqualityIntegerToken ( currentWord, lineNumber, columnNumber );
             }
@@ -90,11 +90,11 @@ namespace AtRoll
             {
                 return new VerbToken ( verb, lineNumber, columnNumber );
             }
-            else if ( PartialDieRegex ().IsMatch ( currentWord ) )
+            else if ( Regex.IsMatch ( currentWord, "^[-]{0,1}d[0-9]+$" ) )
             {
                 return new PartialDieToken ( currentWord, lineNumber, columnNumber );
             }
-            else if ( DieRegex ().IsMatch ( currentWord ) )
+            else if ( Regex.IsMatch ( currentWord, "^[-]{0,1}[0-9]+d[0-9]+$" ) )
             {
                 return new DieToken ( currentWord, lineNumber, columnNumber );
             }
@@ -115,15 +115,6 @@ namespace AtRoll
         /// </summary>
         /// <returns>An enumerator that can be used to iterate through the tokens.</returns>
         IEnumerator IEnumerable.GetEnumerator () => GetEnumerator ();
-
-        [GeneratedRegex ( "^((?:[-0-9]+)|(?:(?:!|<=|>=|<|>)[-0-9]+))$" )]
-        private static partial Regex IntegerLiteralRegex ();
-
-        [GeneratedRegex ( "^[-]{0,1}[0-9]+d[0-9]+$" )]
-        private static partial Regex DieRegex ();
-
-        [GeneratedRegex ( "^[-]{0,1}d[0-9]+$" )]
-        private static partial Regex PartialDieRegex ();
 
         #endregion
     }

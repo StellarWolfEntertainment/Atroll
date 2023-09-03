@@ -3,7 +3,7 @@
 namespace AtRoll
 {
     /// <summary>
-    /// Represents a statement within the 'The New World' game.
+    /// Represents a statement within the @Roll Language.
     /// </summary>
     internal class Statement : IEnumerable<IToken>
     {

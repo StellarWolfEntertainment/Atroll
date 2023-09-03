@@ -1,7 +1,7 @@
 ﻿namespace AtRoll
 {
     /// <summary>
-    /// Represents the main program for processing statements in the 'The New World' game.
+    /// Represents the main program for processing statements in the @Roll Language.
     /// </summary>
     public sealed class Program
     {

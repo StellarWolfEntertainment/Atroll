@@ -6,6 +6,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Title>@Roll</Title>
+    <Company>$(Authors)</Company>
+    <Authors>Raistlin Wolfe</Authors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>True</Optimize>
   </PropertyGroup>
 
 </Project>

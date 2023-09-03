@@ -3,7 +3,7 @@
 namespace AtRoll
 {
     /// <summary>
-    /// Represents a list of statements within the 'The New World' game.
+    /// Represents a list of statements within the @Roll language
     /// </summary>
     internal class StatementList : IReadOnlyList<Statement>
     {

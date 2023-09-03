@@ -1,7 +1,7 @@
 ﻿namespace AtRoll
 {
     /// <summary>
-    /// Represents a nestable statement in the 'The New World' game.
+    /// Represents a nestable statement in the @Roll Language.
     /// </summary>
     internal sealed class NestableStatement
     {
