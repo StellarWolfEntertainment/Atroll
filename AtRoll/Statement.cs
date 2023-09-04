@@ -95,7 +95,17 @@ namespace AtRoll
                             throw new InvalidProgramException ( $"{verb.Type} calls must be followed by an Equality Integer or Integer declaration on line {verb.Line} at column {rule.Column}" );
                         }
                     }
-                    else if ( verb.Type is VerbType.For or VerbType.Add or VerbType.Sub or VerbType.Mul or VerbType.Div )
+                    else if ( verb.Type is VerbType.For)
+                    {
+                        if ( rule is not IntegerLiteralToken ilt )
+                        {
+                            throw new InvalidProgramException ( $"{verb.Type} calls must be followed by an Integer declaration on line {verb.Line} at column {rule.Column}" );
+                        } else if(ilt.Value <= 0)
+                        {
+                            throw new InvalidProgramException ( $"{verb.Type} calls cannot work on negative values on line {verb.Line} at column {rule.Column}" );
+                        }
+                    }
+                    else if ( verb.Type is VerbType.Add or VerbType.Sub or VerbType.Mul or VerbType.Div )
                     {
                         if ( rule is not IntegerLiteralToken )
                         {
