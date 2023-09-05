@@ -100,12 +100,26 @@
                 case VerbType.Drop:
                     ExtremeToken extremeDrop = (ExtremeToken) rule;
                     int length = previous.Count () - 1;
+                    if ( m_Statement.Count == 3 )
+                        length -= ( (IntegerLiteralToken) m_Statement [ 2 ] ).Value;
                     previous = previous.OrderBy ( v => v );
 
                     if ( extremeDrop.Type == ExtremeType.Lowest )
                         previous = previous.Reverse ();
 
                     previous = previous.Take ( length );
+                    break;
+                case VerbType.Keep:
+                    ExtremeToken extremeKeep = (ExtremeToken) rule;
+                    int lengthKeep = previous.Count () + 1;
+                    if ( m_Statement.Count == 3 )
+                        lengthKeep += ( (IntegerLiteralToken) m_Statement [ 2 ] ).Value;
+                    previous = previous.OrderBy ( v => v );
+
+                    if ( extremeKeep.Type == ExtremeType.Highest )
+                        previous = previous.Reverse ();
+
+                    previous = previous.Take ( lengthKeep );
                     break;
                 case VerbType.Reroll:
                     if ( rule is EqualityIntegerToken rerollCond )

@@ -8,6 +8,7 @@
         Roll, // MUST be the first call of the program, subsequent calls 'add' to the current set
         Reroll,
         Drop,
+        Keep,
 
         // Nesting Calls
         While,

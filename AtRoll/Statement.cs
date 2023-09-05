@@ -67,11 +67,30 @@ namespace AtRoll
                             throw new InvalidProgramException ( $"{verb.Type} calls must be followed by a Die declaration on line {verb.Line} at column {rule.Column}" );
                         }
                     }
-                    else if ( verb.Type is VerbType.Drop )
+                    else if ( verb.Type is VerbType.Drop or VerbType.Keep )
                     {
                         if ( rule is not ExtremeToken )
                         {
                             throw new InvalidProgramException ( $"{verb.Type} calls must be followed by an Extreme declaration on line {verb.Line} at column {rule.Column}" );
+                        }
+
+                        if ( m_Tokens.Count == 3 )
+                        {
+                            if ( m_Tokens [ 2 ] is not IntegerLiteralToken ilt )
+                            {
+                                throw new InvalidProgramException ( $"{verb.Type} calls can have only have a second modifier of type integer on line {verb.Line} at column {m_Tokens [ 2 ].Column}" );
+                            }
+                            else
+                            {
+                                if ( ilt.Value < 0 )
+                                {
+                                    throw new InvalidProgramException ( $"{verb.Type} calls cannot operate with negative modifiers on line {verb.Line} at column {m_Tokens [ 2 ].Column}" );
+                                }
+                                else
+                                {
+                                    expected = 3;
+                                }
+                            }
                         }
                     }
                     else if ( verb.Type is VerbType.Reroll )
@@ -95,14 +114,15 @@ namespace AtRoll
                             throw new InvalidProgramException ( $"{verb.Type} calls must be followed by an Equality Integer or Integer declaration on line {verb.Line} at column {rule.Column}" );
                         }
                     }
-                    else if ( verb.Type is VerbType.For)
+                    else if ( verb.Type is VerbType.For )
                     {
                         if ( rule is not IntegerLiteralToken ilt )
                         {
                             throw new InvalidProgramException ( $"{verb.Type} calls must be followed by an Integer declaration on line {verb.Line} at column {rule.Column}" );
-                        } else if(ilt.Value <= 0)
+                        }
+                        else if ( ilt.Value <= 0 )
                         {
-                            throw new InvalidProgramException ( $"{verb.Type} calls cannot work on negative values on line {verb.Line} at column {rule.Column}" );
+                            throw new InvalidProgramException ( $"{verb.Type} calls cannot operate with negative modifiers on line {verb.Line} at column {rule.Column}" );
                         }
                     }
                     else if ( verb.Type is VerbType.Add or VerbType.Sub or VerbType.Mul or VerbType.Div )
