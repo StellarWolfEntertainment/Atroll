@@ -66,7 +66,7 @@ This program is summed up as rolling 4d6 rerolling 1s and 2s and discarding the 
 ```atroll
 Roll 1d8 // Roll 1 eight-sided die
 While 1 // So long as there is a 1 in the current set
- Reroll 1 8 // Reroll all 1's in the current set with an eight-sided die
+ Reroll 1 d8 // Reroll all 1's in the current set with an eight-sided die
 Add 10 // Summate the current set and add 10 to the result
 ```
 This program rolls a singular eight-sided die rerolling 1s and adds 10 to the result
